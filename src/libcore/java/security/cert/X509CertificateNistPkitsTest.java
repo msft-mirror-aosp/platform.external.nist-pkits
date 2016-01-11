@@ -152,6 +152,12 @@ public class X509CertificateNistPkitsTest extends TestCase {
 
     private void assertInvalidPath(String trustAnchor, String[] certs, String[] crls)
             throws Exception, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        assertInvalidPath(trustAnchor, certs, certs, crls);
+    }
+
+    private void assertInvalidPath(String trustAnchor, String[] path, String[] certs,
+            String[] crls) throws Exception, NoSuchAlgorithmException,
+            InvalidAlgorithmParameterException {
         CertificateFactory f = CertificateFactory.getInstance("X.509");
 
         PKIXParameters params = getTestPathParams(f, trustAnchor, certs, crls);
@@ -169,10 +175,16 @@ public class X509CertificateNistPkitsTest extends TestCase {
     private void assertValidPath(String trustAnchor, String[] certs, String[] crls)
             throws Exception, NoSuchAlgorithmException, CertPathValidatorException,
             InvalidAlgorithmParameterException {
+        assertValidPath(trustAnchor, certs, certs, crls);
+    }
+
+    private void assertValidPath(String trustAnchor, String[] path, String[] certs, String[] crls)
+            throws Exception, NoSuchAlgorithmException, CertPathValidatorException,
+            InvalidAlgorithmParameterException {
         CertificateFactory f = CertificateFactory.getInstance("X.509");
 
         PKIXParameters params = getTestPathParams(f, trustAnchor, certs, crls);
-        CertPath cp = getTestPath(f, certs);
+        CertPath cp = getTestPath(f, path);
         CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
 
         PKIXCertPathValidatorResult cpvResult = (PKIXCertPathValidatorResult) cpv.validate(cp,
