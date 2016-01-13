@@ -152,6 +152,12 @@ public class X509CertificateNistPkitsTest extends TestCase {
 
     private void assertInvalidPath(String trustAnchor, String[] certs, String[] crls)
             throws Exception, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        assertInvalidPath(trustAnchor, certs, certs, crls);
+    }
+
+    private void assertInvalidPath(String trustAnchor, String[] path, String[] certs,
+            String[] crls) throws Exception, NoSuchAlgorithmException,
+            InvalidAlgorithmParameterException {
         CertificateFactory f = CertificateFactory.getInstance("X.509");
 
         PKIXParameters params = getTestPathParams(f, trustAnchor, certs, crls);
@@ -169,10 +175,16 @@ public class X509CertificateNistPkitsTest extends TestCase {
     private void assertValidPath(String trustAnchor, String[] certs, String[] crls)
             throws Exception, NoSuchAlgorithmException, CertPathValidatorException,
             InvalidAlgorithmParameterException {
+        assertValidPath(trustAnchor, certs, certs, crls);
+    }
+
+    private void assertValidPath(String trustAnchor, String[] path, String[] certs, String[] crls)
+            throws Exception, NoSuchAlgorithmException, CertPathValidatorException,
+            InvalidAlgorithmParameterException {
         CertificateFactory f = CertificateFactory.getInstance("X.509");
 
         PKIXParameters params = getTestPathParams(f, trustAnchor, certs, crls);
-        CertPath cp = getTestPath(f, certs);
+        CertPath cp = getTestPath(f, path);
         CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
 
         PKIXCertPathValidatorResult cpvResult = (PKIXCertPathValidatorResult) cpv.validate(cp,
@@ -919,6 +931,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testBasicCertificateRevocationTests_ValidSeparateCertificateandCRLKeysTest19() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidSeparateCertificateandCRLKeysTest19EE.crt",
+                "SeparateCertificateandCRLKeysCertificateSigningCACert.crt",
+        };
+
         String[] certs = {
                 "ValidSeparateCertificateandCRLKeysTest19EE.crt",
                 "SeparateCertificateandCRLKeysCRLSigningCert.crt",
@@ -930,12 +947,17 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "SeparateCertificateandCRLKeysCRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.4.20 */
     public void testBasicCertificateRevocationTests_InvalidSeparateCertificateandCRLKeysTest20() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
+
+        String[] path = {
+                "InvalidSeparateCertificateandCRLKeysTest20EE.crt",
+                "SeparateCertificateandCRLKeysCertificateSigningCACert.crt",
+        };
 
         String[] certs = {
                 "InvalidSeparateCertificateandCRLKeysTest20EE.crt",
@@ -948,12 +970,17 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "SeparateCertificateandCRLKeysCRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertInvalidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.4.21 */
     public void testBasicCertificateRevocationTests_InvalidSeparateCertificateandCRLKeysTest21() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
+
+        String[] path = {
+                "InvalidSeparateCertificateandCRLKeysTest21EE.crt",
+                "SeparateCertificateandCRLKeysCA2CertificateSigningCACert.crt",
+        };
 
         String[] certs = {
                 "InvalidSeparateCertificateandCRLKeysTest21EE.crt",
@@ -966,7 +993,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "SeparateCertificateandCRLKeysCA2CRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertInvalidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.5.1 */
@@ -1028,6 +1055,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testVerifyingPathswithSelfIssuedCertificates_ValidBasicSelfIssuedNewWithOldTest4() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidBasicSelfIssuedNewWithOldTest4EE.crt",
+                "BasicSelfIssuedOldKeyCACert.crt",
+        };
+
         String[] certs = {
                 "ValidBasicSelfIssuedNewWithOldTest4EE.crt",
                 "BasicSelfIssuedOldKeyNewWithOldCACert.crt",
@@ -1040,7 +1072,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "BasicSelfIssuedOldKeyCACRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.5.5 */
@@ -1066,6 +1098,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testVerifyingPathswithSelfIssuedCertificates_ValidBasicSelfIssuedCRLSigningKeyTest6() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidBasicSelfIssuedCRLSigningKeyTest6EE.crt",
+                "BasicSelfIssuedCRLSigningKeyCACert.crt",
+        };
+
         String[] certs = {
                 "ValidBasicSelfIssuedCRLSigningKeyTest6EE.crt",
                 "BasicSelfIssuedCRLSigningKeyCRLCert.crt",
@@ -1078,7 +1115,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "BasicSelfIssuedCRLSigningKeyCACRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.5.7 */
@@ -2608,6 +2645,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testDistributionPoints_ValidIDPwithindirectCRLTest24() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidIDPwithindirectCRLTest24EE.crt",
+                "indirectCRLCA2Cert.crt",
+        };
+
         String[] certs = {
                 "ValidIDPwithindirectCRLTest24EE.crt",
                 "indirectCRLCA1Cert.crt",
@@ -2619,12 +2661,17 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA1CRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.25 */
     public void testDistributionPoints_ValidIDPwithindirectCRLTest25() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
+
+        String[] path = {
+                "ValidIDPwithindirectCRLTest25EE.crt",
+                "indirectCRLCA2Cert.crt",
+        };
 
         String[] certs = {
                 "ValidIDPwithindirectCRLTest25EE.crt",
@@ -2637,7 +2684,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA1CRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.26 */
@@ -2680,6 +2727,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testDistributionPoints_ValidcRLIssuerTest28() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidcRLIssuerTest28EE.crt",
+                "indirectCRLCA3Cert.crt",
+        };
+
         String[] certs = {
                 "ValidcRLIssuerTest28EE.crt",
                 "indirectCRLCA3cRLIssuerCert.crt",
@@ -2692,12 +2744,17 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA3cRLIssuerCRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.29 */
     public void testDistributionPoints_ValidcRLIssuerTest29() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
+
+        String[] path = {
+                "ValidcRLIssuerTest29EE.crt",
+                "indirectCRLCA3Cert.crt",
+        };
 
         String[] certs = {
                 "ValidcRLIssuerTest29EE.crt",
@@ -2711,12 +2768,17 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA3cRLIssuerCRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.30 */
     public void testDistributionPoints_ValidcRLIssuerTest30() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
+
+        String[] path = {
+                "ValidcRLIssuerTest30EE.crt",
+                "indirectCRLCA4Cert.crt",
+        };
 
         String[] certs = {
                 "ValidcRLIssuerTest30EE.crt",
@@ -2729,7 +2791,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA4cRLIssuerCRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.31 */
@@ -2772,6 +2834,11 @@ public class X509CertificateNistPkitsTest extends TestCase {
     public void testDistributionPoints_ValidcRLIssuerTest33() throws Exception {
         String trustAnchor = "TrustAnchorRootCertificate.crt";
 
+        String[] path = {
+                "ValidcRLIssuerTest33EE.crt",
+                "indirectCRLCA6Cert.crt",
+        };
+
         String[] certs = {
                 "ValidcRLIssuerTest33EE.crt",
                 "indirectCRLCA6Cert.crt",
@@ -2783,7 +2850,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
                 "indirectCRLCA5CRL.crl",
         };
 
-        assertValidPath(trustAnchor, certs, crls);
+        assertValidPath(trustAnchor, path, certs, crls);
     }
 
     /** NIST PKITS test 4.14.34 */
