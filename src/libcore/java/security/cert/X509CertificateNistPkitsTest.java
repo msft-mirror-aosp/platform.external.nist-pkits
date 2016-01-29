@@ -35,16 +35,32 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
 public class X509CertificateNistPkitsTest extends TestCase {
     public static final String ANY_POLICY_OID = "2.5.29.32.0";
     public static final String RESOURCE_PACKAGE = "/tests/resources/";
+
+    /*
+     * All the certificates in this test should be verified with the same date.
+     * Since none of the built-in roots-of-trust (CA cerificates) are needed,
+     * it should be safe to set this to a fixed date until the certificates
+     * in the tests are updated.
+     */
+    private static final Date TEST_DATE;
+    static {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        cal.set(2015, 0, 1);
+        TEST_DATE = cal.getTime();
+    }
 
     public static InputStream getStream(String name) {
         // If we have the resources packaged up in our jar file, get them that way.
@@ -146,6 +162,7 @@ public class X509CertificateNistPkitsTest extends TestCase {
         params.setInitialPolicies(Collections.singleton(ANY_POLICY_OID));
         params.setPolicyMappingInhibited(false);
         params.setAnyPolicyInhibited(false);
+        params.setDate(TEST_DATE);
 
         return params;
     }
